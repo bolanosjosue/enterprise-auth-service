@@ -1,12 +1,15 @@
-﻿using System;
+﻿using AuthService.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AuthService.Application.Common.Interfaces
+namespace AuthService.Application.Common.Interfaces;
+
+public interface IApplicationDbContext
 {
-    internal interface IApplicationDbContext
-    {
-    }
+    DbSet<User> Users { get; }
+    DbSet<RefreshToken> RefreshTokens { get; }
+    DbSet<Session> Sessions { get; }
+    DbSet<AuditLog> AuditLogs { get; }
+
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

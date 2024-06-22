@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuthService.Domain.Enums;
 
-namespace AuthService.Application.Common.Interfaces
+namespace AuthService.Application.Common.Interfaces;
+
+public interface IAuditService
 {
-    internal interface IAuditService
-    {
-    }
+    Task LogEventAsync(
+        AuditEventType eventType,
+        string description,
+        Guid? userId = null,
+        string? ipAddress = null,
+        string? userAgent = null,
+        string? additionalData = null,
+        CancellationToken cancellationToken = default);
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuthService.Application.Common.Interfaces;
 
-namespace AuthService.Infrastructure.Identity
+namespace AuthService.Infrastructure.Identity;
+
+public class DateTimeService : IDateTime
 {
-    internal class DateTimeService
-    {
-    }
+    public DateTime UtcNow => DateTime.UtcNow;
 }

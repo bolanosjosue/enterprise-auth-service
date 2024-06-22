@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AuthService.Domain.Exceptions;
 
-namespace AuthService.Domain.Exceptions
+public class InvalidTokenException : DomainException
 {
-    internal class InvalidTokenException
+    public InvalidTokenException()
+        : base("Invalid or expired token")
+    {
+    }
+
+    public InvalidTokenException(string message)
+        : base(message)
     {
     }
 }

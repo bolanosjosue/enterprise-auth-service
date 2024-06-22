@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 
-namespace AuthService.Application.Common.Interfaces
+namespace AuthService.Application.Common.Interfaces;
+
+public interface ITokenService
 {
-    internal interface ITokenService
-    {
-    }
+    string GenerateAccessToken(Guid userId, string email, string role);
+    string GenerateRefreshToken();
+    ClaimsPrincipal? ValidateToken(string token);
+    Guid? GetUserIdFromToken(string token);
 }

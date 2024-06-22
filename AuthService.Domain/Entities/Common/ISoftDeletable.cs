@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AuthService.Domain.Entities.Common;
 
-namespace AuthService.Domain.Entities.Common
+public interface ISoftDeletable
 {
-    internal interface ISoftDeletable
-    {
-    }
+    bool IsDeleted { get; }
+    DateTime? DeletedAt { get; }
+    void SoftDelete();
+    void Restore();
 }

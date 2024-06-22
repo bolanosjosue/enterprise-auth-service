@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AuthService.Domain.Enums;
 
-namespace AuthService.Domain.Enums
+public enum SessionStatus
 {
-    internal class SessionStatus
-    {
-    }
+    Active = 0,
+    Expired = 1,
+    Revoked = 2,
+    Compromised = 3
 }

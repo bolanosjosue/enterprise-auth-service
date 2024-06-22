@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AuthService.Application.Common.Interfaces;
 
-namespace AuthService.Application.Common.Interfaces
+public interface ICurrentUserService
 {
-    internal interface ICurrentUserService
-    {
-    }
+    Guid? UserId { get; }
+    string? Email { get; }
+    string? Role { get; }
+    bool IsAuthenticated { get; }
 }

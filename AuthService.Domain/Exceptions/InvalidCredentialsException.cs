@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AuthService.Domain.Exceptions;
 
-namespace AuthService.Domain.Exceptions
+public class InvalidCredentialsException : DomainException
 {
-    internal class InvalidCredentialsException
+    public InvalidCredentialsException()
+        : base("Invalid email or password")
+    {
+    }
+
+    public InvalidCredentialsException(string message)
+        : base(message)
     {
     }
 }

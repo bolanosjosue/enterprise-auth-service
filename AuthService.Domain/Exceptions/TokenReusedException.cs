@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AuthService.Domain.Exceptions;
 
-namespace AuthService.Domain.Exceptions
+public class TokenReusedException : DomainException
 {
-    internal class TokenReusedException
+    public TokenReusedException()
+        : base("Token has been reused - possible security breach detected")
     {
     }
 }

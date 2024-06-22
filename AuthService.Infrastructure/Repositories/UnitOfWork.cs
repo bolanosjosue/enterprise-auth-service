@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuthService.Application.Common.Interfaces;
+using AuthService.Infrastructure.Persistence;
 
-namespace AuthService.Infrastructure.Repositories
+namespace AuthService.Infrastructure.Repositories;
+
+public class UnitOfWork : IUnitOfWork
 {
-    internal class UnitOfWork
+    private readonly ApplicationDbContext _context;
+
+    public UnitOfWork(ApplicationDbContext context)
     {
+        _context = context;
+    }
+
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.SaveChangesAsync(cancellationToken);
     }
 }

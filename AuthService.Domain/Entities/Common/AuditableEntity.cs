@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AuthService.Domain.Entities.Common;
 
-namespace AuthService.Domain.Entities.Common
+public abstract class AuditableEntity : BaseEntity
 {
-    internal class AuditableEntity
+    public Guid? CreatedBy { get; protected set; }
+    public Guid? UpdatedBy { get; protected set; }
+
+    protected void SetCreatedBy(Guid userId)
     {
+        CreatedBy = userId;
+    }
+
+    protected void SetUpdatedBy(Guid userId)
+    {
+        UpdatedBy = userId;
+        MarkAsUpdated();
     }
 }

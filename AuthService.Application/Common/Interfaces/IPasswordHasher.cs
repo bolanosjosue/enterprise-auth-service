@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AuthService.Application.Common.Interfaces;
 
-namespace AuthService.Application.Common.Interfaces
+public interface IPasswordHasher
 {
-    internal interface IPasswordHasher
-    {
-    }
+    string HashPassword(string password);
+    bool VerifyPassword(string password, string passwordHash);
 }
