@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
-namespace AuthService.Application.Sessions.Commands.RevokeAllSessions
+namespace AuthService.Application.Sessions.Commands.RevokeAllSessions;
+
+public class RevokeAllSessionsCommandValidator : AbstractValidator<RevokeAllSessionsCommand>
 {
-    internal class RevokeAllSessionsCommandValidator
+    public RevokeAllSessionsCommandValidator()
     {
+        RuleFor(x => x.UserId)
+            .NotEmpty().WithMessage("User ID is required");
     }
 }

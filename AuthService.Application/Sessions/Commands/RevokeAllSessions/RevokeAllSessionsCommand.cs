@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuthService.Application.Common.Models;
+using MediatR;
 
-namespace AuthService.Application.Sessions.Commands.RevokeAllSessions
+namespace AuthService.Application.Sessions.Commands.RevokeAllSessions;
+
+public record RevokeAllSessionsCommand : IRequest<Result>
 {
-    internal class RevokeAllSessionsCommand
-    {
-    }
+    public Guid UserId { get; init; }
+    public string? IpAddress { get; init; }
+    public string? UserAgent { get; init; }
 }

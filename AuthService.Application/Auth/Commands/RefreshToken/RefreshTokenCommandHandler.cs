@@ -1,6 +1,5 @@
 ﻿using AuthService.Application.Common.Interfaces;
 using AuthService.Application.Common.Models;
-using AuthService.Domain.Entities;
 using AuthService.Domain.Enums;
 using AuthService.Domain.Exceptions;
 using MediatR;
@@ -32,7 +31,6 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
 
     public async Task<Result<AuthResponse>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        // Find refresh token
         var refreshToken = await _context.RefreshTokens
             .Include(rt => rt.User)
             .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken, cancellationToken);
@@ -44,10 +42,8 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
 
         var user = refreshToken.User;
 
-        // Check if token is already revoked (possible token reuse attack)
         if (refreshToken.IsRevoked)
         {
-            // Revoke all user sessions (security breach)
             var userSessions = await _context.Sessions
                 .Where(s => s.UserId == user.Id && s.Status == SessionStatus.Active)
                 .ToListAsync(cancellationToken);
@@ -70,26 +66,21 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
             throw new TokenReusedException();
         }
 
-        // Check if token is expired
         if (refreshToken.IsExpired())
         {
             throw new InvalidTokenException("Refresh token has expired");
         }
 
-        // Check if user is active
         if (!user.IsActive)
         {
             return Result.Failure<AuthResponse>("Account is inactive");
         }
 
-        // Generate new tokens
         var newAccessToken = _tokenService.GenerateAccessToken(user.Id, user.Email, user.Role.ToString());
         var newRefreshTokenString = _tokenService.GenerateRefreshToken();
 
-        // Revoke old refresh token
         refreshToken.Revoke(newRefreshTokenString);
 
-        // Create new refresh token
         var newRefreshToken = Domain.Entities.RefreshToken.Create(
             user.Id,
             newRefreshTokenString,
@@ -99,7 +90,6 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
 
         _context.RefreshTokens.Add(newRefreshToken);
 
-        // Update session activity
         var session = await _context.Sessions
             .Where(s => s.UserId == user.Id && s.Status == SessionStatus.Active)
             .OrderByDescending(s => s.LastActivityAt)
@@ -109,7 +99,6 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        // Audit log
         await _auditService.LogEventAsync(
             AuditEventType.TokenRefreshed,
             "Access token refreshed successfully",

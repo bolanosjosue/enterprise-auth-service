@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuthService.Application.Common.Models;
+using MediatR;
 
-namespace AuthService.Application.Auth.Commands.ChangePassword
+namespace AuthService.Application.Auth.Commands.ChangePassword;
+
+public record ChangePasswordCommand : IRequest<Result>
 {
-    internal class ChangePasswordCommand
-    {
-    }
+    public Guid UserId { get; init; }
+    public string CurrentPassword { get; init; } = string.Empty;
+    public string NewPassword { get; init; } = string.Empty;
+    public string? IpAddress { get; init; }
+    public string? UserAgent { get; init; }
 }

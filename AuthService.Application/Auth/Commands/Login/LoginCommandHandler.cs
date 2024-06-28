@@ -35,7 +35,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
 
     public async Task<Result<AuthResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        // Find user
         var user = await _context.Users
             .Include(u => u.RefreshTokens)
             .Include(u => u.Sessions)
@@ -54,7 +53,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
             return Result.Failure<AuthResponse>("Invalid email or password");
         }
 
-        // Check if account is locked
         if (user.IsLockedOut())
         {
             await _auditService.LogEventAsync(
@@ -68,18 +66,15 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
             throw new AccountLockedException(user.LockoutEndDate!.Value);
         }
 
-        // Check if account is active
         if (!user.IsActive)
         {
             return Result.Failure<AuthResponse>("Account is inactive");
         }
 
-        // Verify password
         if (!_passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
         {
             user.RecordFailedLogin();
 
-            // Lock account after 5 failed attempts
             if (user.FailedLoginAttempts >= 5)
             {
                 user.LockAccount(15);
@@ -108,11 +103,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
             return Result.Failure<AuthResponse>("Invalid email or password");
         }
 
-        // Generate tokens
         var accessToken = _tokenService.GenerateAccessToken(user.Id, user.Email, user.Role.ToString());
         var refreshTokenString = _tokenService.GenerateRefreshToken();
 
-        // Create refresh token
         var refreshToken = RefreshTokenEntity.Create(
             user.Id,
             refreshTokenString,
@@ -122,17 +115,14 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
 
         _context.RefreshTokens.Add(refreshToken);
 
-        // Create session
         var deviceName = request.DeviceName ?? "Unknown Device";
         var session = Session.Create(user.Id, deviceName, request.IpAddress, request.UserAgent);
         _context.Sessions.Add(session);
 
-        // Update user
         user.RecordLogin();
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        // Audit log
         await _auditService.LogEventAsync(
             AuditEventType.LoginSuccessful,
             $"User logged in from {request.IpAddress}",

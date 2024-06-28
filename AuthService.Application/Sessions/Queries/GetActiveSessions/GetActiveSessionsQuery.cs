@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuthService.Application.Common.Models;
+using MediatR;
 
-namespace AuthService.Application.Sessions.Queries.GetActiveSessions
+namespace AuthService.Application.Sessions.Queries.GetActiveSessions;
+
+public record GetActiveSessionsQuery : IRequest<Result<List<SessionDto>>>
 {
-    internal class GetActiveSessionsQuery
-    {
-    }
+    public Guid UserId { get; init; }
+    public Guid? CurrentSessionId { get; init; }
 }
