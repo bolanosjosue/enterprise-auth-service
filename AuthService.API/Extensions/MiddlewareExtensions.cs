@@ -15,4 +15,16 @@ public static class MiddlewareExtensions
         app.UseMiddleware<RateLimitingMiddleware>();
         return app;
     }
+
+    public static IApplicationBuilder UseSecurityHeaders(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<SecurityHeadersMiddleware>();
+        return app;
+    }
+
+    public static IApplicationBuilder UseRequestLogging(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<RequestLoggingMiddleware>();
+        return app;
+    }
 }

@@ -48,7 +48,7 @@ public class ExceptionHandlingMiddleware
                 errorResponse = new
                 {
                     error = "Validation failed",
-                    details = string.Join("; ", validationException.Errors.Select(e => e.ErrorMessage))
+                    details = (string?)string.Join("; ", validationException.Errors.Select(e => e.ErrorMessage))
                 };
                 _logger.LogWarning("Validation error: {Details}", errorResponse.details);
                 break;
@@ -58,12 +58,12 @@ public class ExceptionHandlingMiddleware
                 _logger.LogWarning("Invalid credentials attempt");
                 break;
 
-            case AccountLockedException accountLocked:
+            case AccountLockedException accountLockedException:
                 response.StatusCode = (int)HttpStatusCode.Forbidden;
                 errorResponse = new
                 {
                     error = exception.Message,
-                    details = $"Account locked until {accountLocked.LockoutEndDate:yyyy-MM-dd HH:mm:ss} UTC"
+                    details = (string?)$"Account locked until {accountLockedException.LockoutEndDate:yyyy-MM-dd HH:mm:ss} UTC"
                 };
                 _logger.LogWarning("Account locked: {Message}", exception.Message);
                 break;
