@@ -336,6 +336,7 @@ Ver guía completa en: [TESTING.md](TESTING.md)
 ## 🛡️ Pruebas de Seguridad
 
 Este proyecto incluye pruebas de seguridad documentadas con Kali Linux:
+Ver todas las pruebas completas y documentadas: [Security.md](Security.md)
 
 ## 📊 Pruebas de Seguridad Realizadas
 
