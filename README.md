@@ -38,7 +38,6 @@ Este es un **servicio de autenticación** diseñado para demostrar:
 - **Identificación de dispositivos** con IP, User-Agent y nombre de dispositivo
 - **Revocación manual de sesiones** (cerrar sesión en un dispositivo específico)
 - **Revocación masiva** (cerrar sesión en todos los dispositivos)
-- **Detección de brechas de seguridad**: Revoca todas las sesiones automáticamente al detectar reuso de tokens
 
 ### 🚨 Seguridad Avanzada
 - **Rate Limiting**: 100 requests/minuto por IP para prevenir fuerza bruta
